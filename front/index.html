@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <form action="">
+        <p>
+            <label for="">Nombre</label>
+            <input id="nombre" type="text">
+        </p>
+        <p>
+            <label for="">Precio</label>
+            <input id="precio" type="text">
+        </p>
+        <p>
+            <label for="">Stock</label>
+            <input id="stock" type="text">
+        </p>
+        <button type="button" onclick="consultar()">Consultar</button>
+        <button type="button" onclick="guardar()">Guardar</button>
+        <button type="button" onclick="editar()">Editar</button>
+        <button type="button" onclick="eliminar()">Eliminar</button>
+    </form>
+</body>
+
+</html>
+<script>
+    const hostBase = "http://localhost:8080";
+    function consultar() {
+        //Petición AJAX
+        const nombre = document.getElementById("nombre").value;
+        fetch(`${hostBase}/producto/consultar/${nombre}`)
+            .then(data => data.json())
+            .then(data => {
+                document.getElementById("precio").value = data.price;
+                document.getElementById("stock").value = data.stock;
+            })
+    }
+    function guardar() {
+        //Captura los datos de los inputs
+        const nombre = document.getElementById("nombre").value;
+        const precio = document.getElementById("precio").value;
+        const stock = document.getElementById("stock").value;
+        //Realiza la petición al servidor (consumir API)
+        fetch(`${hostBase}/producto/guardar`, {
+            headers: { "content-type": "application/json" },
+            method: "POST",
+            body: JSON.stringify({ nombre, precio, stock })
+        }).then(data => data.json())
+        .then(data => {
+            alert(data.msg);
+        })
+    }
+</script>
