@@ -36,10 +36,14 @@
         //Petición AJAX
         const nombre = document.getElementById("nombre").value;
         fetch(`${hostBase}/producto/consultar/${nombre}`)
-            .then(data => data.json())
-            .then(data => {
-                document.getElementById("precio").value = data.price;
-                document.getElementById("stock").value = data.stock;
+            .then(res => res.json())
+            .then(res => {
+                if (res.estado == "ok") {
+                    document.getElementById("precio").value = res.data.price;
+                    document.getElementById("stock").value = res.data.stock;
+                } else {
+                    alert(res.msg);
+                }
             })
     }
     function guardar() {
@@ -53,9 +57,10 @@
             method: "POST",
             body: JSON.stringify({ nombre, precio, stock })
         }).then(data => data.json())
-        .then(data => {
-            alert(data.msg);
-        })
+            .then(data => {
+                alert(data.msg);
+                limpiar();
+            })
     }
 
     function editar() {
@@ -69,8 +74,35 @@
             method: "POST",
             body: JSON.stringify({ nombre, precio, stock })
         }).then(data => data.json())
-        .then(data => {
-            alert(data.msg);
-        })
+            .then(data => {
+                alert(data.msg);
+                limpiar();
+            })
+
+    }
+
+    function eliminar() {
+        const resp = confirm("Realmente desea ELIMINAR el producto?");
+        if (resp) {
+            //Captura los datos de los inputs
+            const nombre = document.getElementById("nombre").value;
+            //Realiza la petición al servidor (consumir API)
+            fetch(`${hostBase}/producto/eliminar`, {
+                headers: { "content-type": "application/json" },
+                method: "POST",
+                body: JSON.stringify({ nombre })
+            }).then(data => data.json())
+                .then(data => {
+                    alert(data.msg);
+                    limpiar();
+                })
+
+        }
+    }
+
+    function limpiar() {
+        document.getElementById("nombre").value = "";
+        document.getElementById("precio").value = "";
+        document.getElementById("stock").value = "";
     }
 </script>
