@@ -35,6 +35,31 @@ app.post("/producto/guardar", function (req, res) {
     res.send({estado: "ok", msg: "Producto Guardado :)"});
 })
 
+/**
+ * API Rest Editar Producto
+ * Descripción: Edita un producto guardado en BD
+ * Ruta: /producto/editar
+ * Método: POST
+ * Datos de entrada: {nombre: "papa", precio: 350, stock:130}
+ * Respuesta: {estado: "ok", msg: "Producto Editado :)"}
+ */
+app.post("/producto/editar", function (req, res) {
+    //Desestructuración
+    const { nombre, precio, stock } = req.body;
+    //const prod = { title: nombre, price: precio, stock };
+    // Buscar el producto a Editar
+    let i = 0;
+    for (const p of productos) {
+        if (p.title.toLowerCase() == nombre.toLowerCase()){
+            productos[i].price = precio; // Editar precio
+            productos[i].stock = stock; // Editar stock
+            break;
+        }
+        i++;
+    }
+    res.send({estado: "ok", msg: "Producto Editado :)"});
+})
+
 app.listen(8080, () => {
     console.log("Servidor escuchando en el puerto 8080")
 });
