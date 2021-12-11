@@ -7,12 +7,13 @@ const { userRutas } = require("./rutas/userRutas");
 const app = express();
 app.use(cors()); //Middleware cors
 app.use(express.json()); //Middleware convertir json()
+require("dotenv").config();
 
 // APIs
 app.use("/producto", productoRutas);
 app.use("/user", userRutas);
 
-mongoose.connect("mongodb+srv://rperez:facil123456@cluster0.3nhnv.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+mongoose.connect(process.env.MONGODB_SERVER_URL)
     .then(res => console.log("Conectado a BD"))
     .catch(error => console.log(error));
 
