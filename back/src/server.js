@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const Producto = require("./modelos/productosModel");
 const { productoRutas } = require("./rutas/productoRutas");
 const { userRutas } = require("./rutas/userRutas");
+const { ventasRutas } = require("./rutas/ventasRutas");
 const app = express();
 app.use(cors()); //Middleware cors
 app.use(express.json()); //Middleware convertir json()
@@ -12,6 +13,7 @@ require("dotenv").config();
 // APIs
 app.use("/producto", productoRutas);
 app.use("/user", userRutas);
+app.use("/venta", ventasRutas);
 
 mongoose.connect(process.env.MONGODB_SERVER_URL)
     .then(res => console.log("Conectado a BD"))

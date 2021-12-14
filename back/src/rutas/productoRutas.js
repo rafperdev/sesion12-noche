@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const productoRutas = Router();
-
+const Producto = require("../modelos/productosModel");
 /**
  * API Rest Consultar Producto
  * Descripción: Consulta un nuevo producto en la BD
@@ -12,6 +12,20 @@ const productoRutas = Router();
  productoRutas.post("/consultar", function (req, res) {
     const { nombre } = req.body; // {nombre: "papa"}
     Producto.findOne({ nombre }, function (error, prod) {
+        if (error) {
+            return res.send({ estado: "error", msg: "ERROR: Al buscar" });
+        } else {
+            if (prod !== null) {
+                return res.send({ estado: "ok", msg: "Producto Encontrado", data: prod });
+            } else {
+                return res.send({ estado: "error", msg: "Producto NO Encontrado" });
+            }
+        }
+    })
+});
+
+ productoRutas.post("/listar", function (req, res) {
+    Producto.find({}, function (error, prod) {
         if (error) {
             return res.send({ estado: "error", msg: "ERROR: Al buscar" });
         } else {

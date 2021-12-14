@@ -12,7 +12,7 @@ userRutas.post("/login", async function (req, res) {
     const user = await userModel.findOne({ usuario });
 
     if (!user) {
-        return res.status(401).json({ estado: "error", msg: "ERROR: Credenciales inválidas1" })
+        return res.status(401).json({ estado: "error", msg: "ERROR: Credenciales inválidas" })
     }
     // Comparar la contreña
     const passOK = await compare(password, user.password);
@@ -26,7 +26,7 @@ userRutas.post("/login", async function (req, res) {
         )
         return res.status(200).json({ estado: "ok", msg: "Logueado", token });
     }
-    return res.status(401).json({ estado: "error", msg: "ERROR: Credenciales inválidas2" });
+    return res.status(401).json({ estado: "error", msg: "ERROR: Credenciales inválidas" });
     // Dar/denegar acceso
 });
 
