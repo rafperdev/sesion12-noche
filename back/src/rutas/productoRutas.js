@@ -9,7 +9,7 @@ const Producto = require("../modelos/productosModel");
  * Datos de entrada: {nombre: "papa"}
  * Respuesta: {estado: "ok", msg: "Producto Guardado :)", data: {nombre: "papa", precio: 350, stock:130}}
  */
- productoRutas.post("/consultar", function (req, res) {
+productoRutas.post("/consultar", function (req, res) {
     const { nombre } = req.body; // {nombre: "papa"}
     Producto.findOne({ nombre }, function (error, prod) {
         if (error) {
@@ -24,7 +24,7 @@ const Producto = require("../modelos/productosModel");
     })
 });
 
- productoRutas.post("/listar", function (req, res) {
+productoRutas.post("/listar", function (req, res) {
     Producto.find({}, function (error, prod) {
         if (error) {
             return res.send({ estado: "error", msg: "ERROR: Al buscar" });
@@ -49,14 +49,23 @@ const Producto = require("../modelos/productosModel");
 productoRutas.post("/guardar", function (req, res) {
     //Desestructuración
     const data = req.body;
-    const prod = new Producto(data);
-    prod.save(function (error) {
-        if (error) {
-            console.log(error);
-            return res.send({ estado: "error", msg: "ERROR: Al guardar Producto" });
-        }
-        res.send({ estado: "ok", msg: "Producto Guardado :)" });
-    })
+    if (data._id === "") {
+        delete data._id;
+        const prod = new Producto(data);
+        prod.save(function (error) {
+            if (error) {
+                return res.send({ estado: "error", msg: "ERROR: Al guardar Producto" });
+            }
+            res.send({ estado: "ok", msg: "Producto Guardado :)" });
+        })
+    } else {
+        Producto.updateOne({ _id: data._id }, { $set: { nombre: data.nombre, precio: data.precio, stock: data.stock } }, function (error) {
+            if (error)
+                return res.send({ estado: "error", msg: "ERROR: Al Editar Producto" });
+            res.send({ estado: "ok", msg: "Producto Editado :)" });
+        })
+
+    }
 
 })
 

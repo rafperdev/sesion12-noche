@@ -2,8 +2,9 @@ const { Router } = require("express");
 const ventasRutas = Router();
 const { ventaModel } = require("../modelos/ventasModel");
 const Producto = require("../modelos/productosModel");
+const { userAuthGuard } = require("../guards/userAuthGuard");
 
-ventasRutas.post("/guardar", function (req, res) {
+ventasRutas.post("/guardar", userAuthGuard, function (req, res) {
     const data = req.body;
     Producto.findOne({ stock: { $gt: 0 }, _id: data.producto }, function (err, prod) {
         if (prod) {
@@ -21,7 +22,7 @@ ventasRutas.post("/guardar", function (req, res) {
 
 })
 
-ventasRutas.get("/listar", function (req, res) {
+ventasRutas.get("/listar", userAuthGuard, function (req, res) {
     ventaModel.find({}, function (err, ventas) {
         Producto.populate(ventas, { path: "producto" }, function (err, ventas) {
             if (err) {

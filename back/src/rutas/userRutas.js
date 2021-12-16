@@ -24,7 +24,7 @@ userRutas.post("/login", async function (req, res) {
             },
             process.env.JWT_SECRET_KEY
         )
-        return res.status(200).json({ estado: "ok", msg: "Logueado", token });
+        return res.status(200).json({ estado: "ok", msg: "Logueado", token, "url": "/home" });
     }
     return res.status(401).json({ estado: "error", msg: "ERROR: Credenciales inválidas" });
     // Dar/denegar acceso
